@@ -42,19 +42,39 @@ class RadialAnimation extends StatelessWidget {
   final AnimationController controller;
   final Animation<double> scale;
   final Animation<double> translation;
+  final Animation<double> rotation;
 
   RadialAnimation({Key key, this.controller})
       : scale = Tween<double>(
           begin: 1.5,
           end: 0.0,
         ).animate(
-          CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn),
+          CurvedAnimation(
+            parent: controller,
+            curve: Curves.fastOutSlowIn,
+          ),
         ),
         translation = Tween<double>(
           begin: 0.0,
           end: 100.0,
         ).animate(
-          CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn),
+          CurvedAnimation(
+            parent: controller,
+            curve: Curves.linear,
+          ),
+        ),
+        rotation = Tween<double>(
+          begin: 0.0,
+          end: 360.0,
+        ).animate(
+          CurvedAnimation(
+            parent: controller,
+            curve: Interval(
+              0,
+              0.7,
+              curve: Curves.decelerate,
+            ),
+          ),
         ),
         super(key: key);
 
@@ -63,37 +83,44 @@ class RadialAnimation extends StatelessWidget {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, builder) {
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            _buildButton(0,
-                color: Colors.red, icon: FontAwesomeIcons.thumbtack),
-            _buildButton(45,
-                color: Colors.green, icon: FontAwesomeIcons.sprayCan),
-            _buildButton(90, color: Colors.orange, icon: FontAwesomeIcons.fire),
-            _buildButton(135,
-                color: Colors.blue, icon: FontAwesomeIcons.kiwiBird),
-            _buildButton(180, color: Colors.black, icon: FontAwesomeIcons.cat),
-            _buildButton(225, color: Colors.indigo, icon: FontAwesomeIcons.paw),
-            _buildButton(270, color: Colors.pink, icon: FontAwesomeIcons.bong),
-            _buildButton(315,
-                color: Colors.yellow, icon: FontAwesomeIcons.bolt),
-            Transform.scale(
-              scale: scale.value - 1.5,
-              child: FloatingActionButton(
-                onPressed: _close,
-                child: Icon(FontAwesomeIcons.timesCircle),
-                backgroundColor: Colors.red,
+        return Transform.rotate(
+          angle: radians(rotation.value),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              _buildButton(0,
+                  color: Colors.red, icon: FontAwesomeIcons.thumbtack),
+              _buildButton(45,
+                  color: Colors.green, icon: FontAwesomeIcons.sprayCan),
+              _buildButton(90,
+                  color: Colors.orange, icon: FontAwesomeIcons.fire),
+              _buildButton(135,
+                  color: Colors.blue, icon: FontAwesomeIcons.kiwiBird),
+              _buildButton(180,
+                  color: Colors.black, icon: FontAwesomeIcons.cat),
+              _buildButton(225,
+                  color: Colors.indigo, icon: FontAwesomeIcons.paw),
+              _buildButton(270,
+                  color: Colors.pink, icon: FontAwesomeIcons.bong),
+              _buildButton(315,
+                  color: Colors.yellow, icon: FontAwesomeIcons.bolt),
+              Transform.scale(
+                scale: scale.value - 1.5,
+                child: FloatingActionButton(
+                  onPressed: _close,
+                  child: Icon(FontAwesomeIcons.timesCircle),
+                  backgroundColor: Colors.red,
+                ),
               ),
-            ),
-            Transform.scale(
-              scale: scale.value,
-              child: FloatingActionButton(
-                onPressed: _open,
-                child: Icon(FontAwesomeIcons.solidDotCircle),
+              Transform.scale(
+                scale: scale.value,
+                child: FloatingActionButton(
+                  onPressed: _open,
+                  child: Icon(FontAwesomeIcons.solidDotCircle),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
