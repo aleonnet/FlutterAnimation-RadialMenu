@@ -1,3 +1,5 @@
-# flutter_radial_menu
+## Cool Radial Menu Animation
 
-![App Demo](gif/demo.gif)
+#### DEMO
+
+<img src="./gif/demo.gif" height="600" />
